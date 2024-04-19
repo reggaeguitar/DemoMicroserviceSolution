@@ -11,6 +11,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=password@12345#
+      - ASPNETCORE_HTTP_PORTS=80
     networks:
       - backend
     ports:
@@ -28,12 +29,13 @@ services:
       - DB_HOST=customerdb
       - DB_NAME=dms_customer
       - DB_SA_PASSWORD=password@12345#
-
+      - ASPNETCORE_HTTP_PORTS=80
   productdb:
     container_name: product-db
     image: mysql:8.0.29-oracle
     environment:
      - MYSQL_ROOT_PASSWORD=password@12345#
+     - ASPNETCORE_HTTP_PORTS=80
     ports:
      - 18003:3306
     networks:
@@ -51,6 +53,7 @@ services:
       - DB_HOST=productdb
       - DB_NAME=dms_product
       - DB_ROOT_PASSWORD=password@12345#
+      - ASPNETCORE_HTTP_PORTS=80
   
   orderdb:
     container_name: order-db
@@ -71,6 +74,7 @@ services:
     environment:
       - DB_HOST=orderdb
       - DB_NAME=dms_order
+      - ASPNETCORE_HTTP_PORTS=80
 
   apigateway:
     container_name: api-gateway
@@ -79,10 +83,12 @@ services:
       context: .
       dockerfile: ApiGateway/Dockerfile
     ports:
-      - 8001:80
+      - 8001:8080
     networks:
       - backend
       - frontend
+    environment:
+      - ASPNETCORE_HTTP_PORTS=80     
 
   blazorserverwebui:
     container_name: blazor-web-ui
@@ -91,6 +97,6 @@ services:
       context: .
       dockerfile: BlazorServerWebUI/Dockerfile
     ports:
-      - 8002:80
+      - 8002:8080
     networks:
       - frontend
